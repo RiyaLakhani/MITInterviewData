@@ -10,6 +10,7 @@ from dataclasses import dataclass
 import numpy as np
 from pathlib import Path
 import argparse
+from typing import List
 
 
 
@@ -60,38 +61,36 @@ class CleanSmileData:
         return total / count
 
 
+
 def iter_data_files(data_dir: Path):
     """Yield all data files to process from a directory."""
 
     yield from sorted(data_dir.glob("*.txt"))            
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Aggregate smile data for all files in a directory.")
-
-    parser.add_argument(
-
-        "data_dir",
-        help="Directory containing Smoothed-features-*.txt (or other .txt) files"
-
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data_dir", help="Directory with SmileData .txt files")
     args = parser.parse_args()
 
     data_dir = Path(args.data_dir).expanduser().resolve()
 
-    if not data_dir.is_dir():
-        raise SystemExit(f"{data_dir} is not a directory")
+    file_tokens = []   # <-- one average token per file
 
     for filepath in iter_data_files(data_dir):
         cleaner = CleanSmileData(filepath)
-        try:
-            avg = cleaner.aggregate_average()
-            print(f"{filepath.name}: {avg}")
 
-        except ValueError as e:
+        avg = cleaner.aggregate_average()
+        print(f"{filepath.name}: average first-column token = {avg}")
 
-            print(f"Skipping {filepath.name}: {e}")
+        # TOKEN = the average
+        file_tokens.append(avg)
+
+    print("\nFinal tokens (one per file):")
+    print(file_tokens)
+
+
+
 
 if __name__ == "__main__":
     main()
-
-
