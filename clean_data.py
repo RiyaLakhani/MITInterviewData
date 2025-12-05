@@ -8,6 +8,9 @@ from dataclasses import dataclass
 #import pickle
 #import logging
 import numpy as np
+from pathlib import Path
+import argparse
+
 
 
 @dataclass
@@ -28,25 +31,23 @@ class participant():
     q5 = question
 
 @dataclass
-class clean_smile_data():
-    filename:str = "/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/SmileData/pre/Smoothed-features-P1.txt"
+class CleanSmileData:
+    filename: Path
 
-    def aggregate_average(self):
+    def aggregate_average(self) -> float:
         total = 0.0
         count = 0
 
-    
-        with open (self.filename, "r") as file:
+        with self.filename.open("r") as file:
             for line in file:
                 line = line.strip()
                 if not line:
                     continue
 
-                parts = line.split()   # split by ANY whitespace
+                parts = line.split()
 
                 try:
-                    value = float(parts[0])   # first column
-
+                    value = float(parts[0])
                 except (ValueError, IndexError):
                     continue
 
@@ -54,16 +55,41 @@ class clean_smile_data():
                 count += 1
 
         if count == 0:
-            raise ValueError("No numeric data found in first column")
+            raise ValueError(f"No numeric data found in first column of {self.filename}")
 
         return total / count
 
-            
+
+def iter_data_files(data_dir: Path):
+    """Yield all data files to process from a directory."""
+
+    yield from sorted(data_dir.glob("*.txt"))            
 
 def main():
-    cleaner = clean_smile_data("/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/SmileData/pre/Smoothed-features-P1.txt")
-    avg = cleaner.aggregate_average()
-    print("Average of first column:", avg)
+    parser = argparse.ArgumentParser(description="Aggregate smile data for all files in a directory.")
+
+    parser.add_argument(
+
+        "data_dir",
+        help="Directory containing Smoothed-features-*.txt (or other .txt) files"
+
+    )
+    args = parser.parse_args()
+
+    data_dir = Path(args.data_dir).expanduser().resolve()
+
+    if not data_dir.is_dir():
+        raise SystemExit(f"{data_dir} is not a directory")
+
+    for filepath in iter_data_files(data_dir):
+        cleaner = CleanSmileData(filepath)
+        try:
+            avg = cleaner.aggregate_average()
+            print(f"{filepath.name}: {avg}")
+
+        except ValueError as e:
+
+            print(f"Skipping {filepath.name}: {e}")
 
 if __name__ == "__main__":
     main()
