@@ -33,12 +33,8 @@ class Participant:
     # ONE smile token (average of first column from smile data)
     smile_data: Optional[float] = None
 
-    # prosodic questions
-    q1: Optional[Question] = None
-    q2: Optional[Question] = None
-    q3: Optional[Question] = None
-    q4: Optional[Question] = None
-    q5: Optional[Question] = None
+
+    interview_transcript: Optional[str] = None
 
 
 COLUMNS = [
@@ -180,7 +176,6 @@ class CleanSmileData:
 
 
 
-
 def iter_data_files(data_dir: Path):
     """Yield all data files to process from a directory."""
 
@@ -201,6 +196,8 @@ def merge_prosodic_and_smile(
         participants[pid].smile_data = token
 
     return participants
+
+
 
 
 # def main():
@@ -314,41 +311,80 @@ class CleanProsodicData:
 
 
 
+class CleanTranscriptData:
+    def __init__(self, transcript_csv_path: str | Path) -> None:
+        self.transcript_csv_path = Path(transcript_csv_path).expanduser().resolve()
+
+    def load_participants(self) -> Dict[str, Participant]:
+        """
+        Transcript CSV format (your example):
+          p11,<BIG STRING WITH Interviewer:/Interviewee: and '|' separators>
+
+        Returns:
+          { 'P11': Participant(...), 'PP10': Participant(...), ... }
+        """
+        participants: Dict[str, Participant] = {}
+
+        with self.transcript_csv_path.open(newline="", encoding="utf-8") as f:
+            reader = csv.reader(f)
+
+            for row in reader:
+                # Expect exactly 2 columns (id, transcript)
+                if len(row) < 2:
+                    continue
+
+                pid = self._normalize_participant_id(row[0])
+                if pid is None:
+                    # header row or malformed id
+                    continue
+
+                transcript = row[1].strip()
+                if transcript == "":
+                    continue
+
+                participants[pid] = Participant(
+                    participant_id=pid,
+                    interview_transcript=transcript
+                )
+
+        return participants
+
+    @staticmethod
+    def _normalize_participant_id(raw: str) -> Optional[str]:
+        """
+        'p11' -> 'P11'
+        'pp11' -> 'PP11'
+        Also handles spaces like ' p03 ' -> 'P3'
+        """
+        s = raw.strip().lower()
+        if not s:
+            return None
+
+        if s.startswith("pp"):
+            num = s[2:]
+            return f"PP{int(num)}" if num.isdigit() else None
+
+        if s.startswith("p"):
+            num = s[1:]
+            return f"P{int(num)}" if num.isdigit() else None
+
+        return None
+
+
 if __name__ == "__main__":
-    import sys
+    if len(sys.argv) != 2:
+        raise SystemExit("Usage: python clean_transcripts.py <transcripts.csv>")
 
-    if len(sys.argv) != 3:
-        raise SystemExit(
-            "Usage: python clean_data.py <prosodic_csv_path> <smile_data_dir>"
-        )
+    cleaner = CleanTranscriptData(sys.argv[1])
+    participants = cleaner.load_participants()
 
-    prosodic_csv = sys.argv[1]
-    smile_dir = sys.argv[2]
+    print("Num participants:", len(participants))
 
-    pros_cleaner = CleanProsodicData(prosodic_csv)
-    pros_participants = pros_cleaner.load_participants()
+    # Show P11 if it exists
+    p11 = participants.get("P11")
+    if p11:
+        print("\nP11 transcript preview:")
+        print(p11.interview_transcript[:250], "...")
 
-    smile_cleaner = CleanSmileData(smile_dir)   # <-- use smile_dir, NOT Path
-    smile_tokens = smile_cleaner.compute_smile_tokens()
-
-    print("Smile tokens keys (first few):", list(smile_tokens.keys())[:10])
-    print("P1 in smile tokens?", "P1" in smile_tokens)
-
-    participants = merge_prosodic_and_smile(pros_participants, smile_tokens)
-
-    print("Number of participants:", len(participants))
-
-    example_id = "P1"
-    p = participants.get(example_id)
-    if p:
-        print(f"\nParticipant {example_id}")
-        print("  smile_data (single token):", p.smile_data)
-
-        if p.q1:
-            print("\n  Q1 prosodic features (name + number):")
-            for name, value in p.q1.prosodic_data.items():
-                print(f"    {name}: {value}")
-    else:
-        print("No participant P1 found")
 
 
