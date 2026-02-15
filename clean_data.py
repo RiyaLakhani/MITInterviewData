@@ -16,23 +16,16 @@ import sys
 
 
 
-@dataclass
-class Question:
-    prosodic_data: Dict[str, float]
-    question_asked: Optional[str] = None
-    response_data: Optional[str] = None
-
 
 @dataclass
 class Participant:
     participant_id: str
-
+ 
     # optional “extra” fields
     facial_data: Optional[int] = None
 
     # ONE smile token (average of first column from smile data)
     smile_data: Optional[float] = None
-
 
     interview_transcript: Optional[str] = None
 
@@ -139,13 +132,7 @@ class CleanSmileData:
 
     @staticmethod
     def _participant_from_filename(filename: str) -> Optional[str]:
-        """
-        Extract 'P1', 'P12', 'PP3', etc. from *any* filename that contains it.
-        Works for names like:
-          - Smoothed-features-P1.txt
-          - P1_post_smile.txt
-          - PP3-smile-data.txt
-        """
+        
         base = filename.rsplit(".", 1)[0]
         match = re.search(r"P{1,2}\d+", base)
         if match:
@@ -380,11 +367,12 @@ if __name__ == "__main__":
 
     print("Num participants:", len(participants))
 
-    # Show P11 if it exists
-    p11 = participants.get("P11")
-    if p11:
-        print("\nP11 transcript preview:")
-        print(p11.interview_transcript[:250], "...")
+    #example
+
+    p57 = participants.get("P57")
+    if p57:
+        print("\nP57 transcript preview:")
+        print(p57.interview_transcript[:250], "...")
 
 
 
