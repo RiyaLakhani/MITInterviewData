@@ -1,5 +1,6 @@
 ## Need to feed in information (transcript, etc.)
 
+
 def build_prompt_gendered(participant, assumed_gender):
 
     return f"""
@@ -17,7 +18,7 @@ Respond with a single number between 1 and 7 and justify your reasoning.
 """
 
 
-def build_prompt_non_gendered(participant, assumed_gender):
+def build_prompt_non_gendered(participant):
 
     return f"""
 You are a hiring manager evaluating a job applicants behavioral interview.
