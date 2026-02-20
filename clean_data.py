@@ -13,6 +13,7 @@ import argparse
 from typing import List, Dict, Optional
 import csv
 import sys
+from dataclasses import dataclass, field
 
 
 
@@ -24,8 +25,12 @@ class Participant:
     # optional “extra” fields
     facial_data: Optional[int] = None
 
+    prosodic_data: Dict[str, List[float]] = field(default_factory=dict)
+
     # ONE smile token (average of first column from smile data)
     smile_data: Optional[float] = None
+
+
 
     interview_transcript: Optional[str] = None
 
@@ -186,85 +191,92 @@ def merge_prosodic_and_smile(
 
 
 
-
-# def main():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("data_dir", help="Directory with SmileData .txt files")
-#     args = parser.parse_args()
-
-#     data_dir = Path(args.data_dir).expanduser().resolve()
-
-#     file_tokens = []   # <-- one average token per file
-
-#     for filepath in iter_data_files(data_dir):
-#         cleaner = CleanSmileData(filepath)
-
-#         avg = cleaner.aggregate_average()
-#         print(f"{filepath.name}: average first-column token = {avg}")
-
-#         # TOKEN = the average
-#         file_tokens.append(avg)
-
-#     print("\nFinal tokens (one per file):")
-#     print(file_tokens)
-
+import csv
+import math
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List
 
 
 @dataclass
 class CleanProsodicData:
-    """
-    Cleans and parses the prosodic_features.csv file into Participant/Question objects.
-    """
     csv_path: Path
 
     def __post_init__(self) -> None:
-        # Allow passing a string path
         self.csv_path = Path(self.csv_path).expanduser().resolve()
 
-    # ---------- public API --------------------------------------------------
-
     def load_participants(self) -> Dict[str, Participant]:
-        """
-        Read the CSV and return a dict:
-            { participant_id -> Participant }
-        Each Participant has q1–q5 filled with Question objects
-        containing only the selected prosodic features.
-        """
         participants: Dict[str, Participant] = {}
 
         with self.csv_path.open(newline="") as f:
             reader = csv.reader(f)
-
-            # Read first row and skip if it's the header
             first_row = next(reader)
             if first_row and first_row[0] != "/participant&question":
-                # That wasn't a header; treat it as data
                 data_rows = [first_row] + list(reader)
             else:
                 data_rows = list(reader)
 
-            for row in data_rows:
-                if not row or not row[0].strip():
-                    continue
+        for row in data_rows:
+            if not row or not row[0].strip():
+                continue
 
-                label = row[NAME_TO_IDX["/participant&question"]]  # e.g. "P1Q1"
-                participant_id, q_attr = self._parse_participant_and_question(label)
+            label = row[NAME_TO_IDX["/participant&question"]]  # e.g. "P1Q1"
+            participant_id = self._participant_from_label(label)
 
-                # Get or create the Participant
-                if participant_id not in participants:
-                    participants[participant_id] = Participant(participant_id=participant_id)
-                participant = participants[participant_id]
+            if participant_id not in participants:
+                participants[participant_id] = Participant(participant_id=participant_id)
+            participant = participants[participant_id]
 
-                # Extract only the desired prosodic features
-                prosodic = self._parse_prosodic_row_from_list(row)
-                q_obj = Question(prosodic_data=prosodic)
+            feats = self._parse_prosodic_row_from_list(row)
 
-                # Attach Question object to q1–q5 on Participant
-                if not hasattr(participant, q_attr):
-                    raise ValueError(f"Unexpected question attr '{q_attr}' from label '{label}'")
-                setattr(participant, q_attr, q_obj)
+            # Initialize per-feature lists once
+            if not participant.prosodic_data:
+                participant.prosodic_data = {feat: [] for feat in SELECTED_COLUMNS}
+
+            # Append this question’s values
+            for feat, value in feats.items():
+                participant.prosodic_data[feat].append(value)
 
         return participants
+    # -------- helpers --------
+
+    @staticmethod
+    def _participant_from_label(pq_label: str) -> str:
+        """
+        'P1Q1' -> 'P1'
+        'PP3Q5' -> 'PP3'
+        """
+        pq_label = pq_label.strip()
+        q_index = pq_label.index("Q")
+        return pq_label[:q_index]
+
+    def _parse_prosodic_row_from_list(self, row: list[str]) -> Dict[str, float]:
+        features: Dict[str, float] = {}
+        for name in SELECTED_COLUMNS:
+            idx = NAME_TO_IDX[name]
+            val_str = row[idx] if idx < len(row) else ""
+            features[name] = float(val_str) if val_str != "" else 0.0
+        return features
+
+    @staticmethod
+    def _mean(xs: List[float]) -> float:
+        if not xs:
+            return 0.0
+        return sum(xs) / len(xs)
+
+    @staticmethod
+    def _std(xs: List[float]) -> float:
+        """
+        Population std dev (divide by N). If you want sample std dev, divide by (N-1).
+        """
+        n = len(xs)
+        if n == 0:
+            return 0.0
+        if n == 1:
+            return 0.0
+        mu = sum(xs) / n
+        var = sum((x - mu) ** 2 for x in xs) / n
+        return math.sqrt(var)
 
     # ---------- internal helpers -------------------------------------------
 
@@ -279,22 +291,6 @@ class CleanProsodicData:
         q_num = pq_label[q_index + 1:]            # '1'...'5'
         q_attr = f"q{q_num}"                      # 'q1'...'q5'
         return participant_id, q_attr
-
-    def _parse_prosodic_row_from_list(self, row: list[str]) -> Dict[str, float]:
-        """
-        Given a row like:
-            ['P1Q1', '51.95', '0.0153', ...]
-        return ONLY the selected features, using column positions.
-        """
-        features: Dict[str, float] = {}
-        for name in SELECTED_COLUMNS:
-            idx = NAME_TO_IDX[name]
-            val_str = row[idx] if idx < len(row) else ""
-            if val_str == "":
-                features[name] = 0.0  # or float("nan") if you prefer
-            else:
-                features[name] = float(val_str)
-        return features
 
 
 
@@ -359,20 +355,14 @@ class CleanTranscriptData:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        raise SystemExit("Usage: python clean_transcripts.py <transcripts.csv>")
 
-    cleaner = CleanTranscriptData(sys.argv[1])
-    participants = cleaner.load_participants()
+    participants = CleanProsodicData("/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/Prosody/prosodic_features.csv").load_participants()
+    pid = "P1"
+    p = participants.get(pid)
 
-    print("Num participants:", len(participants))
-
-    #example
-
-    p57 = participants.get("P57")
-    if p57:
-        print("\nP57 transcript preview:")
-        print(p57.interview_transcript[:250], "...")
-
+    if p:
+        print(f"\nParticipant {pid}")
+        for feature, values in p.prosodic_data.items():
+            print(f"{feature}: {values}")
 
 
