@@ -8,9 +8,9 @@ logging.basicConfig(level=logging.DEBUG)
 model_path = '../models'
 token = None
 model_ids = [
-    # "HuggingFaceTB/SmolLM-135M",
-    # 'meta-llama/Llama-3.2-1B-Instruct',
-    # "meta-llama/Llama-3.1-8B-Instruct",    
+     "HuggingFaceTB/SmolLM-135M",
+     'meta-llama/Llama-3.2-1B-Instruct',
+     "meta-llama/Llama-3.1-8B-Instruct",    
     # "google/gemma-3-12b-it",
     # "meta-llama/Llama-4-Scout-17B-16E-Instruct"
     # "mistralai/Ministral-8B-Instruct-2410",
