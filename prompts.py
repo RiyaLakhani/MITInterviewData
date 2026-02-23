@@ -12,6 +12,8 @@ In your evaluation, consider overall professionalism and colleague fit; engageme
 
 After giving the score, briefly justify your reasoning in 2–3 sentences.
 
+**Important:** Output ONLY the number first, then a short justification (2–3 sentences). Do NOT output any numbered list or questions.
+
 """
 
 
@@ -26,5 +28,5 @@ In your evaluation, consider overall professionalism and colleague fit; engageme
 
 After giving the score, briefly justify your reasoning in 2–3 sentences.
 
-
+**Important:** Output ONLY the number first, then a short justification (2–3 sentences). Do NOT output any numbered list or questions.
 """

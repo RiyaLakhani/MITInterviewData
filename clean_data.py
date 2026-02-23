@@ -356,7 +356,7 @@ class CleanTranscriptData:
 
 if __name__ == "__main__":
 
-    participants = CleanProsodicData("/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/Prosody/prosodic_features.csv").load_participants()
+    participants = CleanProsodicData("/Users/mharris/Downloads/Prosody/prosodic_features.csv").load_participants()
     pid = "P1"
     p = participants.get(pid)
 

@@ -1,0 +1,10 @@
+{
+  "model_id": "HuggingFaceTB/SmolLM-135M",
+  "model_path": "../models",
+  "temperature": 0.0,
+  "max_new_tokens": 256,
+  "device": "cpu",
+  "prosodic_csv": "/Users/mharris/Downloads/Prosody/prosodic_features.csv",
+  "transcript_csv": "/Users/mharris/Downloads/interview_transcripts_by_turkers.csv",
+  "smile_dir": "/Users/mharris/Downloads/SmileData"
+}
