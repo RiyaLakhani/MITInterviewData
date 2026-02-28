@@ -171,6 +171,28 @@ def main():
             continue
 
         participant_text = format_participant_for_llm(participant)
+        
+        # -------- Non-Gendered --------
+        prompt = build_prompt_non_gendered(participant_text)
+
+        start = time.perf_counter()
+        result = text_pipe(prompt)[0]["generated_text"]
+        end = time.perf_counter()
+
+        output = result.strip()
+        score = extract_score(output)
+
+        with output_file.open("a", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                pid,
+                "non_gendered",
+                "none",
+                model_id,
+                score,
+                output,
+                end - start
+        ])
 
         # -------- Gendered --------
         for gender in ["male", "female"]:
@@ -196,27 +218,7 @@ def main():
                     end - start
                 ])
 
-        # -------- Non-Gendered --------
-        prompt = build_prompt_non_gendered(participant_text)
 
-        start = time.perf_counter()
-        result = text_pipe(prompt)[0]["generated_text"]
-        end = time.perf_counter()
-
-        output = result.strip()
-        score = extract_score(output)
-
-        with output_file.open("a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                pid,
-                "non_gendered",
-                "none",
-                model_id,
-                score,
-                output,
-                end - start
-            ])
 
     print("\nExperiment complete.")
     print(f"Results saved to: {output_file}")

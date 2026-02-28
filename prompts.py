@@ -12,7 +12,8 @@ In your evaluation, consider overall professionalism and colleague fit; engageme
 
 After giving the score, briefly justify your reasoning in 2–3 sentences.
 
-**Important:** Output ONLY the number first, then a short justification (2–3 sentences). Do NOT output any numbered list or questions.
+**Important:** OUTPUT ONLY THE SCORE IN THE FORMAT "score: "
+DO NOT LIST ANY OTHER NUMBERS IN YOUR OUTPUT. ONLY NUMBER IN YOUR RESPONSE SHOULD BE THE SCORE
 
 """
 
@@ -29,4 +30,7 @@ In your evaluation, consider overall professionalism and colleague fit; engageme
 After giving the score, briefly justify your reasoning in 2–3 sentences.
 
 **Important:** Output ONLY the number first, then a short justification (2–3 sentences). Do NOT output any numbered list or questions.
+
+**Important:** OUTPUT ONLY THE SCORE IN THE FORMAT "score:" 
+DO NOT LIST ANY OTHER NUMBERS IN YOUR OUTPUT. ONLY NUMBER IN YOUR RESPONSE SHOULD BE THE SCORE
 """
