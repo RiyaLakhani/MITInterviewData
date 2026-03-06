@@ -22,6 +22,7 @@ from clean_data import (
     CleanProsodicData,
     CleanTranscriptData,
     CleanSmileData,
+    CleanLexicalData,
     merge_prosodic_and_smile,
 )
 
@@ -50,6 +51,12 @@ def format_participant_for_llm(participant):
     prosodic_text = "\n".join(
         f"{k}: {v}" for k, v in prosodic_means.items()
     )
+    lexical_text = ""
+
+    if participant.lexical_data:
+        lexical_text = "\n".join(
+            f"{k}: {v}" for k, v in participant.lexical_data.items()
+        )
 
     return f"""
 Full Interview Transcript:
@@ -57,6 +64,9 @@ Full Interview Transcript:
 
 Smile Score:
 {participant.smile_data}
+
+Lexical Features:
+{lexical_text}
 
 Aggregated Prosodic Features:
 {prosodic_text}
@@ -68,8 +78,8 @@ Aggregated Prosodic Features:
 # ----------------------------------------------------------
 
 def extract_score(text):
-    match = re.search(r"\b[1-7]\b", text)
-    return int(match.group()) if match else None
+    match = re.search(r"Score\s*[:\-]?\s*([1-7])", text, re.IGNORECASE)
+    return int(match.group(1)) if match else None
 
 
 # ----------------------------------------------------------
@@ -123,18 +133,24 @@ def main():
     prosodic = CleanProsodicData(settings["prosodic_csv"]).load_participants()
     transcripts = CleanTranscriptData(settings["transcript_csv"]).load_participants()
     smile_tokens = CleanSmileData(settings["smile_dir"]).compute_smile_tokens()
+    lexical = CleanLexicalData(settings["lexical_csv"]).load_participants()
 
     merged = merge_prosodic_and_smile(prosodic, smile_tokens)
 
     for pid, p in merged.items():
         if pid in transcripts:
             p.interview_transcript = transcripts[pid].interview_transcript
+    
+    # merge lexical
+    for pid, p in merged.items():
+        if pid in lexical:
+            p.lexical_data = lexical[pid].lexical_data
 
     #participants = merged
     # ------------------------
     # TESTING: only one participant
     # ------------------------
-    participants = {pid: p for pid, p in merged.items() if pid == "P1"}  # replace "P1" with any valid participant ID
+    participants = {pid: p for pid, p in merged.items() if pid == "P10"}  # replace "P1" with any valid participant ID
 
     print(f"Participants loaded: {len(participants)}")
 
@@ -171,7 +187,7 @@ def main():
             continue
 
         participant_text = format_participant_for_llm(participant)
-        
+
         # -------- Non-Gendered --------
         prompt = build_prompt_non_gendered(participant_text)
 
