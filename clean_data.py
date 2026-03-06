@@ -30,9 +30,10 @@ class Participant:
     # ONE smile token (average of first column from smile data)
     smile_data: Optional[float] = None
 
-
-
     interview_transcript: Optional[str] = None
+
+    lexical_data: Dict[str, float] = field(default_factory=dict)
+
 
 
 COLUMNS = [
@@ -352,17 +353,51 @@ class CleanTranscriptData:
             return f"P{int(num)}" if num.isdigit() else None
 
         return None
+    
+class CleanLexicalData:
+
+    def __init__(self, lexical_csv_path: str | Path):
+        self.lexical_csv_path = Path(lexical_csv_path).expanduser().resolve()
+
+    def load_participants(self) -> Dict[str, Participant]:
+
+        participants: Dict[str, Participant] = {}
+
+        with self.lexical_csv_path.open(newline="") as f:
+            reader = csv.DictReader(f)
+
+            for row in reader:
+
+                pid = self._normalize_participant_id(row["Interview ID"])
+
+                if pid not in participants:
+                    participants[pid] = Participant(participant_id=pid)
+
+                p = participants[pid]
+
+                p.lexical_data = {
+                    "words_per_second": float(row["Words per Second"]),
+                    "unique_words_per_second": float(row["Unique Words per Second"]),
+                }
+
+        return participants
+
+    @staticmethod
+    def _normalize_participant_id(raw: str) -> str:
+        s = raw.strip().lower()
+
+        if s.startswith("pp"):
+            return f"PP{int(s[2:])}"
+        if s.startswith("p"):
+            return f"P{int(s[1:])}"
+
+        raise ValueError(f"Invalid participant id: {raw}")
 
 
 if __name__ == "__main__":
 
-    participants = CleanProsodicData("/Users/mharris/Downloads/Prosody/prosodic_features.csv").load_participants()
-    pid = "P1"
-    p = participants.get(pid)
+    lexical = CleanLexicalData("interview_WPS.csv").load_participants()
 
-    if p:
-        print(f"\nParticipant {pid}")
-        for feature, values in p.prosodic_data.items():
-            print(f"{feature}: {values}")
-
+    for pid, p in lexical.items():
+        print(pid, p.lexical_data)
 
