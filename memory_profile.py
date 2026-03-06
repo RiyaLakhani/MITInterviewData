@@ -65,6 +65,6 @@ class Monitor(Thread):
         
 
 # example
-# monitor = Monitor(10)
-# func() # function of interest 
-# monitor.stop()
+monitor = Monitor(1)   
+time.sleep(120)          
+monitor.stop()
