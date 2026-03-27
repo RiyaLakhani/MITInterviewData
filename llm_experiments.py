@@ -15,6 +15,11 @@ import csv
 import numpy as np
 from pathlib import Path
 from datetime import datetime
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
@@ -25,6 +30,7 @@ from clean_data import (
     CleanLexicalData,
     merge_prosodic_and_smile,
 )
+from memory_profile import Monitor
 
 from prompts import build_prompt_gendered, build_prompt_non_gendered
 
@@ -123,7 +129,7 @@ def main():
     return_full_text=False,
     pad_token_id=tokenizer.eos_token_id,
     max_new_tokens=200,
-    do_sample=False  # greedy deterministic decoding
+    do_sample=True  # greedy deterministic decoding
     )
 
     # -----------------------
@@ -150,7 +156,7 @@ def main():
     # ------------------------
     # TESTING: only one participant
     # ------------------------
-    participants = {pid: p for pid, p in merged.items() if pid == "P10"}  # replace "P1" with any valid participant ID
+    participants = {pid: p for pid, p in merged.items() if pid == "P84"}  # replace "P1" with any valid participant ID
 
     print(f"Participants loaded: {len(participants)}")
 
@@ -160,7 +166,7 @@ def main():
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_file = Path(
-        f"mit_bias_results_{model_id.replace('/', '_')}_{timestamp}.csv"
+        f"{timestamp}_mit_bias_results_{model_id.replace('/', '_')}_{timestamp}.csv"
     )
 
     columns = [
@@ -245,4 +251,9 @@ def main():
 # ----------------------------------------------------------
 
 if __name__ == "__main__":
+    monitor = Monitor(60)
+    start_time = time.perf_counter()
     main()
+    end_time = time.perf_counter()
+    logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))
+    monitor.stop()
