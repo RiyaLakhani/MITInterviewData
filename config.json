@@ -1,14 +1,13 @@
 {
   "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-  "model_id": "meta-llama/Llama-3.2-1B-Instruct",
   "model_path": "../models",
   "temperature": 0.0,
   "max_new_tokens": 512,
   "device": "cpu",
 
-  "prosodic_csv": "/Users/mharris/Downloads/Prosody/prosodic_features.csv",
-  "transcript_csv": "/Users/mharris/Downloads/interview_transcripts_by_turkers.csv",
-  "smile_dir": "/Users/mharris/Downloads/SmileData",
+  "prosodic_csv": "prosodic_features.csv",
+  "transcript_csv": "interview_transcripts_by_turkers.csv",
+  "smile_dir": "/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/SmileData",
   "lexical_csv":"interview_WPS.csv"
 
 }
