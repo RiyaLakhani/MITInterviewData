@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "MITInterviewData",
+			"path": ".."
+		},
+		{
+			"name": "SmileData",
+			"path": "../../Downloads/MIT_INTERVIEW_DATASET/SmileData"
+		}
+	],
+	"settings": {}
+}

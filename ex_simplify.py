@@ -16,6 +16,7 @@ import numpy as np
 from pathlib import Path
 from datetime import datetime
 import logging
+from clean_data import CleanProsodicData, CleanTranscriptData
 from simplify_data import simplify_participant, participant_to_llm_text
 
 logging.basicConfig(level=logging.INFO)
@@ -158,7 +159,7 @@ def main():
     # ------------------------
     # TESTING: only one participant
     # ------------------------
-    participants = {pid: p for pid, p in merged.items() if pid == "P84"}  # replace "P1" with any valid participant ID
+    participants = {pid: p for pid, p in merged.items() if pid == "P21"}  # replace "P1" with any valid participant ID
 
     print(f"Participants loaded: {len(participants)}")
 
@@ -194,7 +195,7 @@ def main():
         if not participant.interview_transcript:
             continue
 
-        participant_text = format_participant_for_llm(participant)
+        participant_text = participant_to_llm_text(participant, num_sentences=3)
 
         # -------- Non-Gendered --------
         prompt = build_prompt_non_gendered(participant_text)
@@ -253,9 +254,9 @@ def main():
 # ----------------------------------------------------------
 
 if __name__ == "__main__":
-    monitor = Monitor(60)
-    start_time = time.perf_counter()
+    # monitor = Monitor(60)
+    # start_time = time.perf_counter()
     main()
-    end_time = time.perf_counter()
-    logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))
-    monitor.stop()
+    # end_time = time.perf_counter()
+    # logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))
+    # monitor.stop()
