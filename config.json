@@ -1,13 +1,12 @@
 {
   "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-  "model_path": "../models",
+  "model_path": "/scratch/zt1/project/mcukier-prj/shared/models",
   "temperature": 0.5,
   "max_new_tokens": 512,
   "device": "cpu",
 
-  "prosodic_csv": "prosodic_features.csv",
-  "transcript_csv": "interview_transcripts_by_turkers.csv",
-  "smile_dir": "/Users/riyalakhani/Downloads/MIT_INTERVIEW_DATASET/SmileData",
-  "lexical_csv":"interview_WPS.csv"
-
+  "prosodic_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/prosodic_features.csv",
+  "transcript_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/interview_transcripts_by_turkers.csv",
+  "smile_dir": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/SmileData",
+  "lexical_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/interview_WPS.csv"
 }

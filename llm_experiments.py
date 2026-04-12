@@ -15,12 +15,12 @@ import csv
 import numpy as np
 from pathlib import Path
 from datetime import datetime
-import logging
+# import logging
 from simplify_data import simplify_participant, participant_to_llm_text
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+# timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
@@ -32,7 +32,7 @@ from clean_data import (
     CleanLexicalData,
     merge_prosodic_and_smile,
 )
-from memory_profile import Monitor
+# from memory_profile import Monitor
 
 from prompts import build_prompt_gendered, build_prompt_non_gendered
 
@@ -121,6 +121,7 @@ def main():
     f"{model_path}/{model_id}",
     local_files_only=True
     )
+
 
     print("Model device:", model.device)
 
@@ -253,9 +254,9 @@ def main():
 # ----------------------------------------------------------
 
 if __name__ == "__main__":
-    monitor = Monitor(60)
-    start_time = time.perf_counter()
+    # monitor = Monitor(60)
+    # start_time = time.perf_counter()
     main()
-    end_time = time.perf_counter()
-    logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))
-    monitor.stop()
+    # end_time = time.perf_counter()
+    # logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))
+    # monitor.stop()

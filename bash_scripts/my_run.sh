@@ -11,5 +11,10 @@ export HF_HUB_OFFLINE=1
 mkdir -p travail_output
 mkdir -p results
 
-# run your code
-python3 /Users/riyalakhani/MITInterviewData/llm_experiments.py
+echo "inside run script"
+pwd
+ls
+
+python3 ./llm_experiments.py
+
+#empty line
