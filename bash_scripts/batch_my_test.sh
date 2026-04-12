@@ -1,26 +1,38 @@
 #!/bin/bash
-#SBATCH --job-name=my_test
-#SBATCH --output=output/%j_%x.out
+#SBATCH --job-name=my_test5
+#SBATCH --output=/scratch/zt1/project/mcukier-prj/user/rlakhan3/output/%j_%x.out
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=8G
+#SBATCH --mem=4G
 #SBATCH --time=00:10:00
 #SBATCH --partition=gpu
 #SBATCH --gpus=a100:1
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=YOUR_EMAIL@umd.edu
+#SBATCH --mail-user=rlakhan3@umd.edu
 
 mystoredir=/scratch/zt1/project/mcukier-prj
-myworkdir=/scratch/zt1/project/mcukier-prj/user/$USER
+myworkdir=/scratch/zt1/project/mcukier-prj/user/rlakhan3
+apptainer_bin=/cvmfs/hpcsw.umd.edu/apptainer/1.3.6/x86_64/bin/apptainer
 
-[ -d $myworkdir ] || mkdir -p $myworkdir
-cd $myworkdir
+mkdir -p "$myworkdir/output"
+cd "$myworkdir" || exit 1
 
-module load apptainer
+export HOME="$myworkdir"
+export APPTAINER_NO_HOME=1
 
-srun apptainer exec -e --nv \
-    --bind $mystoredir \
-    --pwd $myworkdir \
-    $mystoredir/shared/sifs/travail_base5.sif \
-    travail_coding/bash_scripts/my_test.sh
+echo "PWD=$PWD"
+echo "PATH=$PATH"
+echo "APPTAINER=$apptainer_bin"
+"$apptainer_bin" --version
+ls -l "$myworkdir"
+
+srun "$apptainer_bin" exec --no-home -e --nv \
+    --bind "$mystoredir" \
+    --pwd "$myworkdir" \
+    "$mystoredir/shared/sifs/travail_base5.sif" \
+    ./my_test.sh
+
+
+
+#empty line so it doesnt get mad

@@ -12,4 +12,4 @@ mkdir -p travail_output
 mkdir -p results
 
 # run your code
-python3 REPLACE THIS 
+python3 /Users/riyalakhani/MITInterviewData/llm_experiments.py

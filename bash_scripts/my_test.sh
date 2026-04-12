@@ -1,7 +1,7 @@
 #!/bin/bash
-nvidia-smi
+echo "inside test script"
 pwd
 ls
-. /opt/venv/bin/activate
-pip show torch
+nvidia-smi
 python3 --version
+#empty line 

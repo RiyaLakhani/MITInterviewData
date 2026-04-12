@@ -22,18 +22,14 @@ In batch_my_experiment.sh
     email
     maybe GPU count
 
-    + 
-
-    make the scripts executables 
-
-In my_run.sh: 
-    change the last line to the actual path 
-
+    + make the scripts executables 
 
 
 ask jess: 
 
-- export APPTAINER_CACHEDIR=$CACHEDIR/cache ???
+- export APPTAINER_CACHEDIR=$CACHEDIR/cache ??? -- buiilding app , stroing cache files 
+all i need is the batch zt llm 
+test file 
 
 
 
