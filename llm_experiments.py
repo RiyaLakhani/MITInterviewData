@@ -99,7 +99,7 @@ def main():
     # -----------------------
     # Load Config
     # -----------------------
-    with open("config.json") as f:
+    with open("/scratch/zt1/project/mcukier-prj/user/mharri48/mit_research/config.json") as f:
         settings = json.load(f)
 
     model_id = settings["model_id"]
@@ -118,9 +118,12 @@ def main():
     )
 
     model = AutoModelForCausalLM.from_pretrained(
-    f"{model_path}/{model_id}",
-    local_files_only=True
-    )
+        f"{model_path}/{model_id}",
+        local_files_only=True,
+        device_map="auto",
+        torch_dtype="auto",
+        low_cpu_mem_usage=True
+        )
 
 
     print("Model device:", model.device)
@@ -168,8 +171,8 @@ def main():
     # -----------------------
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = Path(
-        f"{timestamp}_mit_bias_results_{model_id.replace('/', '_')}_{timestamp}.csv"
+    output_file = Path("results") / (
+    f"{timestamp}_mit_bias_results_{model_id.replace('/', '_')}_{timestamp}.csv"
     )
 
     columns = [

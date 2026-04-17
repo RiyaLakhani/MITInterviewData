@@ -15,6 +15,6 @@ echo "inside run script"
 pwd
 ls
 
-python3 ./llm_experiments.py
+python3 mit_research/llm_experiments.py
 
 #empty line
