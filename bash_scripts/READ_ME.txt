@@ -1,5 +1,10 @@
 batch_my_test.sh -> runs my_test.sh
+
+
 batch_my_experiment.sh -> runs my_run.sh
+
+
+
 my_run.sh -> RUNS OUR PROGRAM
 
 
