@@ -99,7 +99,7 @@ def main():
     # -----------------------
     # Load Config
     # -----------------------
-    with open("config.json") as f:
+    with open("/scratch/zt1/project/mcukier-prj/user/rlakhan3/config.json") as f:
         settings = json.load(f)
 
     model_id = settings["model_id"]
@@ -112,27 +112,37 @@ def main():
     # Load Local Model
     # -----------------------
 
+    local_model_dir = Path(model_path) / model_id
+
+    print(f"\nLoading model: {model_id}")
+    print(f"From local path: {local_model_dir}\n")
+
+    if not local_model_dir.exists():
+        raise FileNotFoundError(f"Model path does not exist: {local_model_dir}")
+
     tokenizer = AutoTokenizer.from_pretrained(
-        f"{model_path}/{model_id}",
+        str(local_model_dir),
         local_files_only=True
     )
 
     model = AutoModelForCausalLM.from_pretrained(
-    f"{model_path}/{model_id}",
-    local_files_only=True
+        str(local_model_dir),
+        local_files_only=True,
+        device_map="auto",
+        dtype="auto"
     )
-
 
     print("Model device:", model.device)
 
     text_pipe = pipeline(
-    "text-generation",
-    model=model,
-    tokenizer=tokenizer,
-    return_full_text=False,
-    pad_token_id=tokenizer.eos_token_id,
-    max_new_tokens=200,
-    do_sample=True  # greedy deterministic decoding
+        "text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        return_full_text=False,
+        pad_token_id=tokenizer.eos_token_id,
+        max_new_tokens=settings["max_new_tokens"],
+        do_sample=True,
+        temperature=settings["temperature"]
     )
 
     # -----------------------
@@ -159,7 +169,7 @@ def main():
     # ------------------------
     # TESTING: only one participant
     # ------------------------
-    participants = {pid: p for pid, p in merged.items() if pid == "P84"}  # replace "P1" with any valid participant ID
+    participants = {pid: p for pid, p in merged.items() if pid == "P21"}  # replace "P1" with any valid participant ID
 
     print(f"Participants loaded: {len(participants)}")
 
@@ -248,7 +258,7 @@ def main():
     print("\nExperiment complete.")
     print(f"Results saved to: {output_file}")
 
-
+    print("Loading model:", model_id)
 # ----------------------------------------------------------
 # Run Script
 # ----------------------------------------------------------
@@ -256,6 +266,7 @@ def main():
 if __name__ == "__main__":
     # monitor = Monitor(60)
     # start_time = time.perf_counter()
+
     main()
     # end_time = time.perf_counter()
     # logger.info('Script complete after {:.4f} seconds'.format(end_time-start_time))

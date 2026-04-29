@@ -31,6 +31,6 @@ for model_id in model_ids:
         print(e)
         continue
 snapshot_download(
-    repo_id="meta-llama/Llama-3.2-1B-Instruct",
-    local_dir="../models/meta-llama/Llama-3.2-1B-Instruct"
+    repo_id="meta-llama/Llama-3.2-8B-Instruct",
+    local_dir="../models/meta-llama/Llama-3.2-8B-Instruct"
 )
