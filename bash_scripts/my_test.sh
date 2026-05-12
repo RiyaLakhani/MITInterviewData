@@ -4,4 +4,5 @@ pwd
 ls
 nvidia-smi
 python3 --version
+
 #empty line 

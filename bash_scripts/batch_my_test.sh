@@ -33,6 +33,4 @@ srun "$apptainer_bin" exec --no-home -e --nv \
     "$mystoredir/shared/sifs/travail_base5.sif" \
     ./my_test.sh
 
-
-
 #empty line so it doesnt get mad

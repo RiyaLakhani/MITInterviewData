@@ -1,0 +1,45 @@
+source_file,test,condition_1,condition_2,t_statistic,p_value,n,condition_3,f_statistic
+FINAL_non-gender_gender_fem_male_temp_1.csv,male vs female,gendered_male,gendered_female,-2.2136997454456195,0.02850323590226267,138,,
+FINAL_non-gender_gender_fem_male_temp_1.csv,male vs non-gendered,gendered_male,non_gendered_none,-2.223283035792023,0.028700612010120505,91,,
+FINAL_non-gender_gender_fem_male_temp_1.csv,female vs non-gendered,gendered_female,non_gendered_none,0.22821773229381923,0.8199946935301684,91,,
+FINAL_non-gender_gender_fem_male_temp_1.csv,ANOVA,gendered_female,gendered_male,,0.11071990499577074,91,non_gendered_none,2.2187876960193007
+FINAL_non-gender_gender_fem_male_temp_1-v2.csv,male vs female,gendered_male,gendered_female,-1.8941433038395261,0.06031395050246746,138,,
+FINAL_non-gender_gender_fem_male_temp_1-v2.csv,male vs non-gendered,gendered_male,non_gendered_none,-1.682348721151166,0.09630568907709684,83,,
+FINAL_non-gender_gender_fem_male_temp_1-v2.csv,female vs non-gendered,gendered_female,non_gendered_none,-0.6523845003770244,0.5159778461801976,83,,
+FINAL_non-gender_gender_fem_male_temp_1-v2.csv,ANOVA,gendered_female,gendered_male,,0.5381334691399998,83,non_gendered_none,0.621212121212121
+FINAL_non-gender_gender_fem_male_temp_0.7.csv,male vs female,gendered_male,gendered_female,-2.469247735209719,0.014769562303374877,138,,
+FINAL_non-gender_gender_fem_male_temp_0.7.csv,male vs non-gendered,gendered_male,non_gendered_none,-3.408353310729917,0.0010312399914688517,80,,
+FINAL_non-gender_gender_fem_male_temp_0.7.csv,female vs non-gendered,gendered_female,non_gendered_none,-1.9281871993664446,0.05742488916255629,80,,
+FINAL_non-gender_gender_fem_male_temp_0.7.csv,ANOVA,gendered_female,gendered_male,,0.09122925278375092,80,non_gendered_none,2.418733533206142
+FINAL_non-gender_gender_fem_male_temp_0.7-v2.csv,male vs female,gendered_male,gendered_female,-1.9396798989993695,0.05447340881458246,138,,
+FINAL_non-gender_gender_fem_male_temp_0.7-v2.csv,male vs non-gendered,gendered_male,non_gendered_none,-1.1229556588595588,0.2652931125679053,71,,
+FINAL_non-gender_gender_fem_male_temp_0.7-v2.csv,female vs non-gendered,gendered_female,non_gendered_none,-1.7392713482426003,0.08638284062580232,71,,
+FINAL_non-gender_gender_fem_male_temp_0.7-v2.csv,ANOVA,gendered_female,gendered_male,,0.4997479579841936,71,non_gendered_none,0.6959476466146487
+FINAL_non-gender_gender_fem_male_temp_0.5.csv,male vs female,gendered_male,gendered_female,-3.1515301748312763,0.0019952561226373733,138,,
+FINAL_non-gender_gender_fem_male_temp_0.5.csv,male vs non-gendered,gendered_male,non_gendered_none,-4.574828812428794,1.5715373268806185e-05,88,,
+FINAL_non-gender_gender_fem_male_temp_0.5.csv,female vs non-gendered,gendered_female,non_gendered_none,-1.353503785283575,0.17940090546042314,88,,
+FINAL_non-gender_gender_fem_male_temp_0.5.csv,ANOVA,gendered_female,gendered_male,,0.054545339959258886,88,non_gendered_none,2.941381546943409
+FINAL_non-gender_gender_temp_1.csv,male vs female,gendered_male,gendered_female,-1.3099338826243305,0.19241044269670024,138,,
+FINAL_non-gender_gender_temp_1.csv,male vs non-gendered,gendered_male,non_gendered_none,-1.6276636936191908,0.10725463519627502,87,,
+FINAL_non-gender_gender_temp_1.csv,female vs non-gendered,gendered_female,non_gendered_none,-0.1197019513108181,0.9049984466302726,87,,
+FINAL_non-gender_gender_temp_1.csv,ANOVA,gendered_female,gendered_male,,0.3676141211521877,87,non_gendered_none,1.0046130952380954
+FINAL_gender_non-gender_fem_male_temp_0.7.csv,male vs female,gendered_male,gendered_female,-4.238774954483206,4.10545693752269e-05,138,,
+FINAL_gender_non-gender_fem_male_temp_0.7.csv,male vs non-gendered,gendered_male,non_gendered_none,-3.4204797384746897,0.0010145652714098773,76,,
+FINAL_gender_non-gender_fem_male_temp_0.7.csv,female vs non-gendered,gendered_female,non_gendered_none,-1.275222545753045,0.20616656880622908,76,,
+FINAL_gender_non-gender_fem_male_temp_0.7.csv,ANOVA,gendered_female,gendered_male,,0.07957002638441492,76,non_gendered_none,2.5598061455970296
+FINAL_non-gender_gender_fem_male_temp_0.5-v2.csv,male vs female,gendered_male,gendered_female,-2.285917546911714,0.023793725175355815,138,,
+FINAL_non-gender_gender_fem_male_temp_0.5-v2.csv,male vs non-gendered,gendered_male,non_gendered_none,-1.6850326940612763,0.09578468211084488,83,,
+FINAL_non-gender_gender_fem_male_temp_0.5-v2.csv,female vs non-gendered,gendered_female,non_gendered_none,-0.5547580226727383,0.5805702513605947,83,,
+FINAL_non-gender_gender_fem_male_temp_0.5-v2.csv,ANOVA,gendered_female,gendered_male,,0.5741880091862944,83,non_gendered_none,0.5560515021459225
+FINAL_gender_non-gender_male_fem_temp_1.csv,male vs female,gendered_male,gendered_female,-1.4992888272544689,0.13609957106590895,138,,
+FINAL_gender_non-gender_male_fem_temp_1.csv,male vs non-gendered,gendered_male,non_gendered_none,-2.694788712349984,0.008643772208242431,78,,
+FINAL_gender_non-gender_male_fem_temp_1.csv,female vs non-gendered,gendered_female,non_gendered_none,-1.0511578070993952,0.2964739029197386,78,,
+FINAL_gender_non-gender_male_fem_temp_1.csv,ANOVA,gendered_female,gendered_male,,0.09204345080213981,78,non_gendered_none,2.41029956243689
+FINAL_gender_non-gender_fem_male_temp_0.7-v3.csv,male vs female,gendered_male,gendered_female,-3.1273750567643726,0.002154623344210171,138,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v3.csv,male vs non-gendered,gendered_male,non_gendered_none,-3.103410346521142,0.002422150724258577,113,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v3.csv,female vs non-gendered,gendered_female,non_gendered_none,-0.6826386157855855,0.49624474375576183,113,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v3.csv,ANOVA,gendered_female,gendered_male,,0.2162538024329066,113,non_gendered_none,1.5383026338440349
+FINAL_gender_non-gender_fem_male_temp_0.7-v2.csv,male vs female,gendered_male,gendered_female,-2.506301266840586,0.013369825548719112,138,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v2.csv,male vs non-gendered,gendered_male,non_gendered_none,-3.089228073100768,0.0027494042560834314,82,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v2.csv,female vs non-gendered,gendered_female,non_gendered_none,-0.9480982327478418,0.34589952271800906,82,,
+FINAL_gender_non-gender_fem_male_temp_0.7-v2.csv,ANOVA,gendered_female,gendered_male,,0.07395707683835301,82,non_gendered_none,2.632381271463273

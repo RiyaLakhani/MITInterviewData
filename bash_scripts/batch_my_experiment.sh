@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=16G
-#SBATCH --time=00:10:00
+#SBATCH --time=02:00:00
 #SBATCH --partition=gpu
 #SBATCH --gpus=a100:1
 #SBATCH --mail-type=ALL
@@ -31,4 +31,6 @@ srun "$apptainer_bin" exec --no-home -e --nv \
     --bind "$mystoredir" \
     --pwd "$myworkdir" \
     "$mystoredir/shared/sifs/travail_base5.sif" \
-    /bin/bash ./my_run.sh
+    /bin/bash ./my_run_temp_1.sh
+
+# empty line

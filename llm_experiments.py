@@ -17,6 +17,7 @@ from pathlib import Path
 from datetime import datetime
 # import logging
 from simplify_data import simplify_participant, participant_to_llm_text
+import argparse
 
 # logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger(__name__)
@@ -97,9 +98,30 @@ def extract_score(text):
 def main():
 
     # -----------------------
+    # Parse Command Line Args
+    # -----------------------
+
+    parser = argparse.ArgumentParser(description="Run MIT Interview Bias Experiment")
+    parser.add_argument(
+        "--config",
+        required=True,
+        help="Path to the config JSON file"
+    )
+
+    args = parser.parse_args()
+
+    config_path = Path(args.config)
+
+    if not config_path.exists():
+        raise FileNotFoundError(f"Config file does not exist: {config_path}")
+
+    print(f"\nUsing config file: {config_path}\n")
+
+    # -----------------------
     # Load Config
     # -----------------------
-    with open("/scratch/zt1/project/mcukier-prj/user/rlakhan3/config.json") as f:
+
+    with config_path.open("r") as f:
         settings = json.load(f)
 
     model_id = settings["model_id"]
@@ -169,7 +191,7 @@ def main():
     # ------------------------
     # TESTING: only one participant
     # ------------------------
-    participants = {pid: p for pid, p in merged.items() if pid == "P21"}  # replace "P1" with any valid participant ID
+    participants = merged
 
     print(f"Participants loaded: {len(participants)}")
 
@@ -178,15 +200,25 @@ def main():
     # -----------------------
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = Path(
-        f"{timestamp}_mit_bias_results_{model_id.replace('/', '_')}_{timestamp}.csv"
+    temperature = settings["temperature"]
+
+    output_dir = Path("results")
+    output_dir.mkdir(exist_ok=True)
+
+    output_file = output_dir / (
+        f"{timestamp}_mit_bias_results_"
+        f"{model_id.replace('/', '_')}_"
+        f"temp_{temperature}.csv"
     )
+    # data_used = "no_transcript"
 
     columns = [
         "participant_id",
         "condition",
         "assumed_gender",
         "model_id",
+        "temperature",
+        # "data_used"
         "score",
         "llm_output",
         "runtime_seconds"
@@ -206,6 +238,32 @@ def main():
             continue
 
         participant_text = format_participant_for_llm(participant)
+            
+        # -------- Gendered --------
+        for gender in ["female","male"]:
+
+            prompt = build_prompt_gendered(participant_text, gender)
+
+            start = time.perf_counter()
+            result = text_pipe(prompt)[0]["generated_text"]
+            end = time.perf_counter()
+
+            output = result.strip()
+            score = extract_score(output)
+
+            with output_file.open("a", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    pid,
+                    "gendered",
+                    gender,
+                    model_id,
+                    settings["temperature"],
+                    # data_used,
+                    score,
+                    output,
+                    end - start
+                ])
 
         # -------- Non-Gendered --------
         prompt = build_prompt_non_gendered(participant_text)
@@ -224,36 +282,12 @@ def main():
                 "non_gendered",
                 "none",
                 model_id,
+                settings["temperature"],
+                # data_used,
                 score,
                 output,
                 end - start
         ])
-
-        # -------- Gendered --------
-        for gender in ["male", "female"]:
-
-            prompt = build_prompt_gendered(participant_text, gender)
-
-            start = time.perf_counter()
-            result = text_pipe(prompt)[0]["generated_text"]
-            end = time.perf_counter()
-
-            output = result.strip()
-            score = extract_score(output)
-
-            with output_file.open("a", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow([
-                    pid,
-                    "gendered",
-                    gender,
-                    model_id,
-                    score,
-                    output,
-                    end - start
-                ])
-
-
 
     print("\nExperiment complete.")
     print(f"Results saved to: {output_file}")
