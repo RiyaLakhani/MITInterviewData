@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=my_test5
-#SBATCH --output=/scratch/zt1/project/mcukier-prj/user/rlakhan3/output/%j_%x.out
+#SBATCH --output=/scratch/zt1/project/mcukier-prj/user/mharri48/output/%j_%x.out
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=4G
+#SBATCH --mem=16G
 #SBATCH --time=00:10:00
 #SBATCH --partition=gpu
 #SBATCH --gpus=a100:1
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=rlakhan3@umd.edu
+#SBATCH --mail-user=mharri48@umd.edu
 
 mystoredir=/scratch/zt1/project/mcukier-prj
 myworkdir=/scratch/zt1/project/mcukier-prj/user/rlakhan3
