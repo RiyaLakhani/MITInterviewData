@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=my_run3
-#SBATCH --output=/scratch/zt1/project/mcukier-prj/user/mharri48/output/%j_%x.out
+#SBATCH --output=/scratch/zt1/project/mcukier-prj/user/rlakhan3/output/%j_%x.out
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -9,10 +9,10 @@
 #SBATCH --partition=gpu
 #SBATCH --gpus=a100:1
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=mharri48@umd.edu
+#SBATCH --mail-user=rlakhan3@umd.edu
 
 mystoredir=/scratch/zt1/project/mcukier-prj
-myworkdir=/scratch/zt1/project/mcukier-prj/user/mharri48
+myworkdir=/scratch/zt1/project/mcukier-prj/user/rlakhan3
 apptainer_bin=/cvmfs/hpcsw.umd.edu/apptainer/1.3.6/x86_64/bin/apptainer
 
 mkdir -p "$myworkdir/output"
@@ -31,6 +31,6 @@ srun "$apptainer_bin" exec --no-home -e --nv \
     --bind "$mystoredir" \
     --pwd "$myworkdir" \
     "$mystoredir/shared/sifs/travail_base5.sif" \
-    /bin/bash ./my_run_temp_1.sh
+    /bin/bash ./my_run_temp_0_5.sh
 
 # empty line

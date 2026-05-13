@@ -240,7 +240,7 @@ def main():
         participant_text = format_participant_for_llm(participant)
             
         # -------- Gendered --------
-        for gender in ["female","male"]:
+        for gender in ["male","female"]:
 
             prompt = build_prompt_gendered(participant_text, gender)
 
