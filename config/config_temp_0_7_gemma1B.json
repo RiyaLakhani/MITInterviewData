@@ -1,0 +1,12 @@
+{
+  "model_id": "google/gemma-3-1b-it-qat-q4_0-gguf",
+  "model_path": "/scratch/zt1/project/mcukier-prj/shared/models",
+  "temperature": 0.7,
+  "max_new_tokens": 512,
+  "device": "cuda",
+
+  "prosodic_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/prosodic_features.csv",
+  "transcript_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/interview_transcripts_by_turkers.csv",
+  "smile_dir": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/SmileData",
+  "lexical_csv": "/scratch/zt1/project/mcukier-prj/user/rlakhan3/interview_WPS.csv"
+}

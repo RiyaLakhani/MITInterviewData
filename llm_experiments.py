@@ -240,12 +240,13 @@ def main():
         participant_text = format_participant_for_llm(participant)
             
         # -------- Gendered --------
-        for gender in ["male","female"]:
+        for gender in ["male","female", "non-binary"]:
 
             prompt = build_prompt_gendered(participant_text, gender)
 
             start = time.perf_counter()
             result = text_pipe(prompt)[0]["generated_text"]
+            #hit the llm , recieving the gender 
             end = time.perf_counter()
 
             output = result.strip()
